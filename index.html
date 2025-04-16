@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>CPU scheduling algorithms</title>
+    <!-- Font Awesome for social icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+  <body>
+    <div id="particles-js"></div>
+
+    <div
+      class="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100 sm:items-center sm:pt-0"
+    >
+      <div class="">
+        <h1 class="font-bold text-3xl mb-4">CPU Scheduling Algorithms</h1>
+      </div>
+      <div class="border border-gray-400 p-8 rounded bg-slate-700">
+        <div class="form-group">
+          <label for="algorithm" class="block text-white text-sm font-bold mb-2"
+            >Select Algorithm</label
+          >
+          <select
+            name="algorithm"
+            id="algorithm"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            onchange="onChange()"
+          >
+            <option value="fcfs" d class="text-center font-bold mb-4">
+              FCFS
+            </option>
+
+            <option
+              value="priorityNonPreemptive"
+              class="text-center font-bold mb-4"
+            >
+              Priority Non Preemptive
+            </option>
+            <option
+              value="priorityPreemptive"
+              class="text-center font-bold mb-4"
+            >
+              Priority Preemptive
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label
+            for="arrival_time"
+            class="block text-white text-sm font-bold mb-2 mt-4"
+            >Arrival Time</label
+          >
+          <input
+            type="text"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="arrival_time"
+            placeholder="e.g. 0 1 2 3"
+          />
+        </div>
+        <div class="form-group">
+          <label
+            for="burst_time "
+            class="block text-white text-sm font-bold mb-2 mt-4"
+            >Burst Time</label
+          >
+          <input
+            type="text"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="burst_time"
+            placeholder="e.g. 0 1 2 3"
+          />
+        </div>
+        <div class="form-group" id="priority" style="display: none">
+          <label
+            for="priority"
+            class="block text-white text-sm font-bold mb-2 mt-4"
+            >Priority</label
+          >
+          <input
+            type="text"
+            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            id="priorityn"
+            placeholder="e.g. 0 1 2 3"
+          />
+        </div>
+        <div>
+          <button
+            type="submit"
+            onclick="onClick()"
+          >
+            <span class="btn-text">Calculate</span>
+            <span class="btn-icon">→</span>
+          </button>
+        </div>
+        <div id="result"></div>
+        <div id="avg_waiting_time" class="text-white"></div>
+        <div id="avg_turn_around_time" class="text-white"></div>
+
+        <div>
+          <h1
+            class="font-semibold text-center text-1xl mt-3 text-white"
+            id="gantttile"
+          ></h1>
+          <div
+            id="gantt_chart"
+            class="text-white grid justify-items-center mt-3"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <div class="developer-info">
+            <span class="developer-prefix">Developed by</span>
+            <a href="https://portfoliohimanshu.vercel.app/" target="_blank" class="developer-name">
+              Himanshu Raj
+              <span class="developer-tooltip">View Portfolio</span>
+            </a>
+          </div>
+        </div>
+        <div class="footer-social">
+          <a href="https://portfoliohimanshu.vercel.app/" target="_blank" class="social-link portfolio-link" aria-label="Portfolio">
+            <i class="fas fa-globe"></i>
+            <span class="link-text">Portfolio</span>
+          </a>
+          <a href="https://www.linkedin.com/in/himanshu-raj-184488303/" target="_blank" class="social-link linkedin-link" aria-label="LinkedIn">
+            <i class="fab fa-linkedin-in"></i>
+            <span class="link-text">LinkedIn</span>
+          </a>
+          <a href="https://portfoliohimanshu.vercel.app/" target="_blank" class="social-link github-link" aria-label="GitHub">
+            <i class="fab fa-github"></i>
+            <span class="link-text">GitHub</span>
+          </a>
+          <a href="https://leetcode.com/u/himanshuraj48512/" target="_blank" class="social-link leetcode-link" aria-label="LeetCode">
+            <i class="fas fa-code"></i>
+            <span class="link-text">LeetCode</span>
+          </a>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <p>© 2023 CPU Scheduling Algorithms | All Rights Reserved</p>
+      </div>
+    </footer>
+
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        particlesJS("particles-js", {
+          "particles": {
+            "number": {
+              "value": 80,
+              "density": {
+                "enable": true,
+                "value_area": 800
+              }
+            },
+            "color": {
+              "value": "#3a86ff"
+            },
+            "shape": {
+              "type": "circle",
+              "stroke": {
+                "width": 0,
+                "color": "#000000"
+              },
+              "polygon": {
+                "nb_sides": 5
+              }
+            },
+            "opacity": {
+              "value": 0.3,
+              "random": true,
+              "anim": {
+                "enable": true,
+                "speed": 1,
+                "opacity_min": 0.1,
+                "sync": false
+              }
+            },
+            "size": {
+              "value": 3,
+              "random": true,
+              "anim": {
+                "enable": false,
+                "speed": 40,
+                "size_min": 0.1,
+                "sync": false
+              }
+            },
+            "line_linked": {
+              "enable": true,
+              "distance": 150,
+              "color": "#4cc9f0",
+              "opacity": 0.2,
+              "width": 1
+            },
+            "move": {
+              "enable": true,
+              "speed": 2,
+              "direction": "none",
+              "random": false,
+              "straight": false,
+              "out_mode": "out",
+              "bounce": false,
+              "attract": {
+                "enable": false,
+                "rotateX": 600,
+                "rotateY": 1200
+              }
+            }
+          },
+          "interactivity": {
+            "detect_on": "canvas",
+            "events": {
+              "onhover": {
+                "enable": true,
+                "mode": "grab"
+              },
+              "onclick": {
+                "enable": true,
+                "mode": "push"
+              },
+              "resize": true
+            },
+            "modes": {
+              "grab": {
+                "distance": 140,
+                "line_linked": {
+                  "opacity": 0.5
+                }
+              },
+              "bubble": {
+                "distance": 400,
+                "size": 40,
+                "duration": 2,
+                "opacity": 8,
+                "speed": 3
+              },
+              "repulse": {
+                "distance": 200,
+                "duration": 0.4
+              },
+              "push": {
+                "particles_nb": 4
+              },
+              "remove": {
+                "particles_nb": 2
+              }
+            }
+          },
+          "retina_detect": true
+        });
+      });
+    </script>
+  </body>
+</html>
+
